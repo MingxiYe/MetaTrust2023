@@ -32,7 +32,6 @@ module.exports = {
     selfhost: {
       url: "http://1.15.39.10:8545",
       accounts: [process.env.PRIVATE_KEY],
-      //0xA28E810e3B9Dc6452f190E6953A9f3823fa56090
     }
   },
   solidity: {
