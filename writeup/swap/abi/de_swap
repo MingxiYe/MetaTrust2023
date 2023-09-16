@@ -1,0 +1,122 @@
+// Decompiled by library.dedaub.com
+// 2023.09.13 04:33 UTC
+// Compiled using the solidity compiler version 0.8.21
+
+
+// Data structures and variables inferred from the use of storage instructions
+uint256 stor_0_0_19; // STORAGE[0x0] bytes 0 to 19
+uint256 stor_1_0_19; // STORAGE[0x1] bytes 0 to 19
+uint256 _factory; // STORAGE[0x2] bytes 0 to 19
+uint256 _pair; // STORAGE[0x3] bytes 0 to 19
+uint256 stor_3_20_20; // STORAGE[0x3] bytes 20 to 20
+
+
+
+function factory() public payable { 
+    return _factory;
+}
+
+function 0xea371e58() public payable { 
+    return 0xde0b6b3a7640000;
+}
+
+function 0xeb1f66fa() public payable { 
+    return stor_1_0_19;
+}
+
+function 0x144() private { 
+    v0, /* uint256 */ v1 = stor_1_0_19.balanceOf(_pair).gas(msg.gas);//18
+    require(bool(v0), 0, RETURNDATASIZE()); // checks call status, propagates error data on error
+    require(MEM[64] + RETURNDATASIZE() - MEM[64] >= 32);
+    v2 = _SafeAdd(20, 0xf9ccd8a1c5080000);//18_ETH
+    v3 = v4 = v1 <= v2;
+    if (!bool(v1 > v2)) {
+        v5 = _SafeMul(65, 0xde0b6b3a7640000); //1_ETH
+        require(100, Panic(18)); // division by zero
+        v3 = v6 = _pair.balance <= v5 / 100; // <= 0.65ETH
+    }
+    if (v3) {
+        return v3;
+    } else {
+        v7 = _SafeMul(65, 0xf9ccd8a1c5080000);
+        require(100, Panic(18)); // division by zero
+        if (bool(v1 > v7 / 100)) {
+            return v1 <= v7 / 100;
+        } else {
+            v8 = _SafeAdd(20, 0xde0b6b3a7640000);
+            return _pair.balance <= v8; //<1_ETH
+        }
+    }
+}
+
+function _SafeAdd(uint256 varg0, uint256 varg1) private { 
+    require(varg0 <= varg1 + varg0, Panic(17)); // arithmetic overflow or underflow
+    return varg1 + varg0;
+}
+
+function _SafeMul(uint256 varg0, uint256 varg1) private { 
+    require((varg1 == varg1 * varg0 / varg0) | !varg0, Panic(17)); // arithmetic overflow or underflow
+    return varg1 * varg0;
+}
+
+function () public payable { 
+    revert();
+}
+
+function 0x5fe90122() public payable { 
+    return stor_0_0_19;
+}
+
+function isSolved() public payable { 
+    v0 = 0x144();
+    return bool(v0);
+}
+
+function 0x7b174d54() public payable { 
+    require(!stor_3_20_20, Error(0x433032));
+    stor_3_20_20 = 1;
+    v0 = new uint256[](0);
+    v1 = new uint256[](0);
+    require(bool(stor_1_0_19.code.size));
+    v2 = stor_1_0_19.mint(msg.sender, 0xf9ccd8a1c5080000, v0, v1).gas(msg.gas);
+    require(bool(v2), 0, RETURNDATASIZE()); // checks call status, propagates error data on error
+}
+
+function pair() public payable { 
+    return _pair;
+}
+
+function 0xae3ab3ce() public payable { 
+    return 0xf9ccd8a1c5080000;
+}
+
+// Note: The function selector is not present in the original solidity code.
+// However, we display it for the sake of completeness.
+
+function __function_selector__(bytes4 function_selector) public payable { 
+    MEM[64] = 128;
+    require(!msg.value);
+    if (msg.data.length >= 4) {
+        if (0xae3ab3ce > function_selector >> 224) {
+            if (0x5fe90122 == function_selector >> 224) {
+                0x5fe90122();
+            } else if (0x64d98f6e == function_selector >> 224) {
+                isSolved();
+            } else if (0x7b174d54 == function_selector >> 224) {
+                0x7b174d54();
+            } else if (0xa8aa1b31 == function_selector >> 224) {
+                pair();
+            }
+        } else if (0xae3ab3ce == function_selector >> 224) {
+            0xae3ab3ce();
+        } else if (0xc45a0155 == function_selector >> 224) {
+            factory();
+        } else if (0xea371e58 == function_selector >> 224) {
+            0xea371e58();
+        } else {
+            require(0xeb1f66fa == function_selector >> 224);
+            0xeb1f66fa();
+        }
+    }
+    ();
+}

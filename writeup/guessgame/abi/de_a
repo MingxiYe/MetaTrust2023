@@ -1,0 +1,59 @@
+function () public payable { 
+    revert();
+}
+
+function 0x07403830(uint256 varg0, uint256 varg1, address varg2, uint256 varg3) public payable { 
+    require(msg.data.length - 4 >= 128);
+    if (msg.value <= 0x56bc75e2d63100000) {
+        MEM[varg0] = msg.value;
+        require(1 == MEM[96], Error('wrong number01'));
+    }
+    require(msg.sender <= 1 + msg.sender, Panic(17)); // arithmetic overflow or underflow
+    require(1 + msg.sender <= 3 + msg.sender, Panic(17)); // arithmetic overflow or underflow
+    require(3 + msg.sender <= 35 + msg.sender, Panic(17)); // arithmetic overflow or underflow
+    require(35 + msg.sender <= varg1 + (35 + msg.sender), Panic(17)); // arithmetic overflow or underflow
+    require(2 == uint8(varg1 + (35 + msg.sender)), Error('wrong number02'));
+    require(varg2 < 0xffff8545dcfcb03fcb875f56beddc4);
+    v0, /* uint256 */ v1 = varg2.staticcall('Fallbacker()').gas(msg.gas);
+    if (RETURNDATASIZE() == 0) {
+        v2 = v3 = 96;
+    } else {
+        v2 = v4 = new bytes[](RETURNDATASIZE());
+        v1 = v4.data;
+        RETURNDATACOPY(v1, 0, RETURNDATASIZE());
+    }
+    require(32 == MEM[v2], Error('wrong number03'));
+    v5, /* uint256 */ v6 = address(0xa4c61eada2f7b25313bb11a08a6cb220c939092).number().gas(msg.gas);
+    require(bool(v5), 0, RETURNDATASIZE()); // checks call status, propagates error data on error
+    require(MEM[64] + RETURNDATASIZE() - MEM[64] >= 32);
+    require(v6 == varg3, Error('wrong number04'));
+    v7, /* bool */ v8 = address(0x88a58800221186feacdcbba1fe2d850094177926).transfer(msg.sender, 100).gas(msg.gas);
+    require(bool(v7), 0, RETURNDATASIZE()); // checks call status, propagates error data on error
+    require(MEM[64] + RETURNDATASIZE() - MEM[64] >= 32);
+    require(v8 == bool(v8));
+    v9 = msg.sender.call().value(this.balance).gas(2300 * !this.balance);
+    require(bool(v9), 0, RETURNDATASIZE()); // checks call status, propagates error data on error
+    return bool(1);
+}
+
+function isSolved() public nonPayable { 
+    v0, /* uint256 */ v1 = address(0x88a58800221186feacdcbba1fe2d850094177926).balanceOf(this).gas(msg.gas);
+    require(bool(v0), 0, RETURNDATASIZE()); // checks call status, propagates error data on error
+    require(MEM[64] + RETURNDATASIZE() - MEM[64] >= 32);
+    return bool(!v1);
+}
+
+// Note: The function selector is not present in the original solidity code.
+// However, we display it for the sake of completeness.
+
+function __function_selector__(bytes4 function_selector) public payable { 
+    MEM[64] = 128;
+    if (msg.data.length >= 4) {
+        if (0x7403830 == function_selector >> 224) {
+            0x07403830();
+        } else if (0x64d98f6e == function_selector >> 224) {
+            isSolved();
+        }
+    }
+    ();
+}

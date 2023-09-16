@@ -1,0 +1,16 @@
+// Decompiled by library.dedaub.com
+// 2023.09.13 05:45 UTC
+
+
+
+
+// Note: The function selector is not present in the original solidity code.
+// However, we display it for the sake of completeness.
+
+function __function_selector__() public payable { 
+    CALLDATACOPY(RETURNDATASIZE(), RETURNDATASIZE(), msg.data.length);
+    v0 = 0xc1e51d34333966c99351c1983fcd978d5c114569.delegatecall(MEM[(RETURNDATASIZE()) len msg.data.length], MEM[(RETURNDATASIZE()) len (RETURNDATASIZE())]).gas(msg.gas);
+    RETURNDATACOPY(RETURNDATASIZE(), RETURNDATASIZE(), RETURNDATASIZE());
+    require(v0, RETURNDATASIZE(), RETURNDATASIZE());
+    return MEM[(RETURNDATASIZE()) len (RETURNDATASIZE())];
+}

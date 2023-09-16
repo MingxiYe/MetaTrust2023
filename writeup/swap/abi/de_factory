@@ -1,0 +1,171 @@
+// Decompiled by library.dedaub.com
+// 2023.09.13 05:39 UTC
+// Compiled using the solidity compiler version 0.8.21
+
+
+// Data structures and variables inferred from the use of storage instructions
+uint256 _fee; // STORAGE[0x0]
+mapping (uint256 => uint256) _getPair; // STORAGE[0x3]
+uint256[] _allPairsLength; // STORAGE[0x4]
+uint256 _pairCodeAddress; // STORAGE[0x1] bytes 0 to 19
+uint256 _protocolManager; // STORAGE[0x2] bytes 0 to 19
+
+
+// Events
+feeUpdated(uint256, uint256);
+PairCreated(address, address, uint256);
+protocolManagerChanged(address, address);
+
+function allPairs(uint256 varg0) public nonPayable { 
+    require(msg.data.length - 4 >= 32);
+    require(varg0 < _allPairsLength.length);
+    return address(_allPairsLength[varg0]);
+}
+
+function createPairWithAddLiquidityETH(address varg0, uint256 varg1, uint256 varg2, address varg3, uint256 varg4) public payable { 
+    require(msg.data.length - 4 >= 160);
+    require(varg0 == varg0);
+    require(varg3 == varg3);
+    v0 = v1 = address(_getPair[address(varg0)]);
+    if (!v1) {
+        v0 = v2 = 0x700(varg0);
+    }
+    v3, /* uint256 */ v4 = address(v0).call(0x5ce974fa00000000000000000000000000000000000000000000000000000000, varg1, varg2, msg.sender, varg3, varg4).value(msg.value).gas(msg.gas);
+    require(bool(v3), 0, RETURNDATASIZE()); // checks call status, propagates error data on error
+    require(MEM[64] + RETURNDATASIZE() - MEM[64] >= 32);
+    return address(v0), v4;
+}
+
+function rescueTokens(address varg0, address varg1) public nonPayable { 
+    require(msg.data.length - 4 >= 64);
+    require(varg0 == varg0);
+    require(varg1 == varg1);
+    require(msg.sender == _protocolManager, Error('no access'));
+    require(varg0, Error('zero address'));
+    require(varg0 - varg1, Error('to / token issue'));
+    v0, /* uint256 */ v1 = varg0.balanceOf(this).gas(msg.gas);
+    require(bool(v0), 0, RETURNDATASIZE()); // checks call status, propagates error data on error
+    require(MEM[64] + RETURNDATASIZE() - MEM[64] >= 32);
+    v2, /* bool */ v3 = varg0.transfer(varg1, v1).gas(msg.gas);
+    require(bool(v2), 0, RETURNDATASIZE()); // checks call status, propagates error data on error
+    require(MEM[64] + RETURNDATASIZE() - MEM[64] >= 32);
+    require(v3 == bool(v3));
+    require(v3, Error("can't process"));
+}
+
+function allPairsLength() public nonPayable { 
+    return _allPairsLength.length;
+}
+
+function changeFee(uint256 varg0) public nonPayable { 
+    require(msg.data.length - 4 >= 32);
+    require(msg.sender == _protocolManager, Error('no access'));
+    require(varg0 < 10000, Error('invalid fee'));
+    emit feeUpdated(_fee, varg0);
+    _fee = varg0;
+}
+
+function pairCodeAddress() public nonPayable { 
+    return _pairCodeAddress;
+}
+
+function createPair(address varg0) public nonPayable { 
+    require(msg.data.length - 4 >= 32);
+    require(varg0 == varg0);
+    v0 = 0x700(varg0);
+    return address(v0);
+}
+
+function protocolManager() public nonPayable { 
+    return _protocolManager;
+}
+
+function changeProtocolManager(address varg0) public nonPayable { 
+    require(msg.data.length - 4 >= 32);
+    require(varg0 == varg0);
+    require(msg.sender == _protocolManager, Error('no access'));
+    require(varg0, Error('zero address'));
+    emit protocolManagerChanged(_protocolManager, varg0);
+    _protocolManager = varg0;
+}
+
+function fee() public nonPayable { 
+    return _fee;
+}
+
+function 0x700(uint256 varg0) private { 
+    require(address(varg0), Error('zero address'));
+    require(!address(_getPair[address(varg0)]), Error('pair already created'));
+    require(bool((address(CREATE2(0, v0.data, 55, keccak256(bytes20(varg0 << 96))))).code.size));
+    v1 = address(CREATE2(0, v0.data, 55, keccak256(bytes20(varg0 << 96)))).setup(address(varg0)).gas(msg.gas);
+    require(bool(v1), 0, RETURNDATASIZE()); // checks call status, propagates error data on error
+    v2 = address(CREATE2(0, v0.data, 55, keccak256(bytes20(varg0 << 96))));
+    _getPair[address(varg0)] = v2 | bytes12(_getPair[address(varg0)]);
+    _allPairsLength = _allPairsLength.length + 1;
+    MEM[0] = 4;
+    _allPairsLength[_allPairsLength.length] = v2 | bytes12(_allPairsLength[_allPairsLength.length]);
+    emit PairCreated(address(varg0), v2, _allPairsLength.length);
+    return CREATE2(0, v0.data, 55, keccak256(bytes20(varg0 << 96)));
+}
+
+function () public payable { 
+    revert();
+}
+
+function rescueTokensFromPool(address varg0, address varg1, address varg2) public nonPayable { 
+    require(msg.data.length - 4 >= 96);
+    require(varg0 == varg0);
+    require(varg1 == varg1);
+    require(varg2 == varg2);
+    require(msg.sender == _protocolManager, Error('no access'));
+    require(varg0, Error('zero address'));
+    require(varg1, Error('zero address'));
+    require(varg1 - varg2, Error('to / token issue'));
+    require(bool((address(varg0)).code.size));
+    v0 = varg0.rescueTokens(varg1, varg2).gas(msg.gas);
+    require(bool(v0), 0, RETURNDATASIZE()); // checks call status, propagates error data on error
+}
+
+function getPair(address varg0) public nonPayable { 
+    require(msg.data.length - 4 >= 32);
+    require(varg0 == varg0);
+    return address(_getPair[varg0]);
+}
+
+// Note: The function selector is not present in the original solidity code.
+// However, we display it for the sake of completeness.
+
+function __function_selector__(bytes4 function_selector) public payable { 
+    MEM[64] = 128;
+    if (msg.data.length >= 4) {
+        if (0x6a1db1bf > function_selector >> 224) {
+            if (0xb0cae2e == function_selector >> 224) {
+                rescueTokensFromPool(address,address,address);
+            } else if (0x1a788a02 == function_selector >> 224) {
+                getPair(address);
+            } else if (0x1e3dd18b == function_selector >> 224) {
+                allPairs(uint256);
+            } else if (0x5194cf97 == function_selector >> 224) {
+                createPairWithAddLiquidityETH(address,uint256,uint256,address,uint256);
+            } else if (0x5431c94e == function_selector >> 224) {
+                rescueTokens(address,address);
+            } else if (0x574f2ba3 == function_selector >> 224) {
+                allPairsLength();
+            }
+        } else if (0x6a1db1bf == function_selector >> 224) {
+            changeFee(uint256);
+        } else if (0x9ae49151 == function_selector >> 224) {
+            pairCodeAddress();
+        } else if (0x9ccb0744 == function_selector >> 224) {
+            createPair(address);
+        } else if (0xab4b6692 == function_selector >> 224) {
+            protocolManager();
+        } else if (0xc90f4438 == function_selector >> 224) {
+            changeProtocolManager(address);
+        } else {
+            require(0xddca3f43 == function_selector >> 224);
+            fee();
+        }
+    }
+    ();
+}

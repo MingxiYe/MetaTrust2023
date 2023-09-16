@@ -1,0 +1,203 @@
+// Data structures and variables inferred from the use of storage instructions
+mapping (uint256 => mapping (uint256 => uint256)) _updateERC165Cache; // STORAGE[0x0]
+mapping (uint256 => uint256) _setManager; // STORAGE[0x1]
+mapping (uint256 => mapping (uint256 => uint256)) owner_2; // STORAGE[0x2]
+
+
+// Events
+InterfaceImplementerSet(address, bytes32, address);
+ManagerChanged(address, address);
+
+function updateERC165Cache(address varg0, bytes4 varg1) public payable { 
+    require(msg.data.length - 4 >= 64);
+    require(varg0 == varg0);
+    require(varg1 == varg1);
+    v0 = 0x5f3(varg1, varg0);
+    if (!v0) {
+        v1 = v2 = 0;
+    }
+    _updateERC165Cache[varg0][varg1] = address(v1) | bytes12(_updateERC165Cache[address(varg0)][bytes4(varg1)]);
+    owner_2[varg0][varg1] = 0x1 | bytes31(owner_2[address(varg0)][bytes4(varg1)]);
+}
+
+function getInterfaceImplementer(address varg0, bytes32 varg1) public payable { 
+    require(msg.data.length - 4 >= 64);
+    require(varg0 == varg0);
+    v0 = 0x57c(varg1, varg0);
+    return address(v0);
+}
+
+function implementsERC165InterfaceNoCache(address varg0, bytes4 varg1) public payable { 
+    require(msg.data.length - 4 >= 64);
+    require(varg0 == varg0);
+    require(varg1 == varg1);
+    v0 = 0x5f3(varg1, varg0);
+    return bool(v0);
+}
+
+function implementsERC165Interface(address varg0, bytes4 varg1) public payable { 
+    require(msg.data.length - 4 >= 64);
+    require(varg0 == varg0);
+    require(varg1 == varg1);
+    v0 = 0x695(varg1, varg0);
+    return bool(v0);
+}
+
+function 0x3ae(uint256 varg0) private { 
+    if (address(_setManager[address(varg0)])) {
+        return address(_setManager[address(varg0)]);
+    } else {
+        return varg0;
+    }
+}
+
+function 0x57c(uint256 varg0, uint256 varg1) private { 
+    if (!address(varg1)) {
+        varg1 = v0 = msg.sender;
+    }
+    if (uint224(varg0)) {
+        return address(_updateERC165Cache[address(varg1)][varg0]);
+    } else {
+        v1 = 0x695(varg0, varg1);
+        if (!v1) {
+            varg1 = v2 = 0;
+        }
+        return varg1;
+    }
+}
+
+function 0x5f3(uint256 varg0, uint256 varg1) private { 
+    v0, /* uint256 */ v1 = varg1.supportsInterface(0x1ffc9a700000000000000000000000000000000000000000000000000000000).gas(30000);
+    v2 = v3 = !v0;
+    if (v0) {
+        v2 = v4 = !v1;
+    }
+    if (!v2) {
+        v5, /* bool */ v6 = varg1.supportsInterface(~uint224.max).gas(30000);
+        v7 = v8 = !v5;
+        if (v5) {
+            v7 = v9 = bool(v6);
+        }
+        if (!v7) {
+            v10, /* uint256 */ v11 = varg1.supportsInterface(varg0).gas(30000);
+            v12 = v13 = v10 == 1;
+            if (v13) {
+                v12 = v14 = 1 == v11;
+            }
+            if (!v12) {
+                return 0;
+            } else {
+                return 1;
+            }
+        } else {
+            return 0;
+        }
+    } else {
+        return 0;
+    }
+}
+
+function 0x695(uint256 varg0, uint256 varg1) private { 
+    if (uint8(owner_2[address(varg1)][bytes4(varg0)])) {
+        return address(_updateERC165Cache[address(varg1)][bytes4(varg0)]) == address(varg1);
+    } else {
+        v0 = 0x5f3(varg0, varg1);
+        return v0;
+    }
+}
+
+function () public payable { 
+    revert();
+}
+
+function setInterfaceImplementer(address varg0, bytes32 varg1, address varg2) public payable { 
+    require(msg.data.length - 4 >= 96);
+    require(varg0 == varg0);
+    require(varg2 == varg2);
+    if (!varg0) {
+        v0 = v1 = msg.sender;
+    }
+    v2 = 0x3ae(v0);
+    require(address(v2) == msg.sender, Error('Not the manager'));
+    require(uint224(varg1), Error('Must not be an ERC165 hash'));
+    v3 = v4 = bool(address(varg2));
+    if (varg2) {
+        v3 = v5 = msg.sender != varg2;
+    }
+    if (v3) {
+        MEM[52 + MEM[64]] = 0x249cb3fa00000000000000000000000000000000000000000000000000000000;
+        MEM[52 + MEM[64] + 4] = varg1;
+        MEM[52 + MEM[64] + 36] = address(v0);
+        v6, /* uint256 */ v7 = varg2.staticcall(MEM[(MEM[64]) len (120 + MEM[64] - MEM[64])], MEM[(MEM[64]) len 32]).gas(msg.gas);
+        require(bool(v6), 0, RETURNDATASIZE()); // checks call status, propagates error data on error
+        require(MEM[64] + RETURNDATASIZE() - MEM[64] >= 32);
+        require(v7 == keccak256('ERC1820_ACCEPT_MAGIC'), Error('Does not implement the interface'));
+    }
+    _updateERC165Cache[address(v0)][varg1] = varg2 | bytes12(_updateERC165Cache[address(v0)][varg1]);
+    emit InterfaceImplementerSet(address(v0), varg1, varg2);
+}
+
+function getManager(address varg0) public payable { 
+    require(msg.data.length - 4 >= 32);
+    require(varg0 == varg0);
+    v0 = 0x3ae(varg0);
+    return address(v0);
+}
+
+function setManager(address varg0, address varg1) public payable { 
+    require(msg.data.length - 4 >= 64);
+    require(varg0 == varg0);
+    require(varg1 == varg1);
+    v0 = 0x3ae(varg0);
+    require(address(v0) == msg.sender, Error('Not the manager'));
+    if (varg1 == varg0) {
+        v1 = v2 = 0;
+    }
+    _setManager[varg0] = address(v1) | bytes12(_setManager[address(varg0)]);
+    emit ManagerChanged(varg0, varg1);
+}
+
+function interfaceHash(string varg0) public payable { 
+    require(msg.data.length - 4 >= 32);
+    require(varg0 <= uint64.max);
+    require(4 + varg0 + 31 < msg.data.length);
+    require(varg0.length <= uint64.max);
+    require(4 + varg0 + varg0.length + 32 <= msg.data.length);
+    v0 = new uint256[](varg0.length + v0.data - MEM[64] - 32);
+    CALLDATACOPY(v0.data, varg0.data, varg0.length);
+    MEM[varg0.length + v0.data] = 0;
+    v1 = v0.length;
+    v2 = v0.data;
+    return keccak256(v0);
+}
+
+// Note: The function selector is not present in the original solidity code.
+// However, we display it for the sake of completeness.
+
+function __function_selector__(bytes4 function_selector) public payable { 
+    MEM[64] = 128;
+    require(!msg.value);
+    if (msg.data.length >= 4) {
+        if (0xa41e7d51 > function_selector >> 224) {
+            if (0x29965a1d == function_selector >> 224) {
+                setInterfaceImplementer(address,bytes32,address);
+            } else if (0x3d584063 == function_selector >> 224) {
+                getManager(address);
+            } else if (0x5df8122f == function_selector >> 224) {
+                setManager(address,address);
+            } else if (0x65ba36c1 == function_selector >> 224) {
+                interfaceHash(string);
+            }
+        } else if (0xa41e7d51 == function_selector >> 224) {
+            updateERC165Cache(address,bytes4);
+        } else if (0xaabbb8ca == function_selector >> 224) {
+            getInterfaceImplementer(address,bytes32);
+        } else if (0xb7056765 == function_selector >> 224) {
+            implementsERC165InterfaceNoCache(address,bytes4);
+        } else {
+            require(0xf712f3e8 == function_selector >> 224);
+            implementsERC165Interface(address,bytes4);
+        }
+    }
+    ();
+}

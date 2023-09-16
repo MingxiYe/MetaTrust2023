@@ -1,0 +1,645 @@
+// Decompiled by library.dedaub.com
+// 2023.09.13 04:57 UTC
+// Compiled using the solidity compiler version 0.8.21
+
+
+// Data structures and variables inferred from the use of storage instructions
+uint256 _totalSupply; // STORAGE[0x0]
+mapping (uint256 => uint256) _balanceOf; // STORAGE[0x1]
+mapping (uint256 => mapping (uint256 => uint256)) _allowance; // STORAGE[0x2]
+uint256 _token1; // STORAGE[0x3] bytes 0 to 19
+uint256 _factory; // STORAGE[0x4] bytes 0 to 19
+uint256 _setup; // STORAGE[0x4] bytes 20 to 20
+
+
+// Events
+Burn(address, uint256, uint256, address);
+Approval(address, address, uint256);
+Transfer(address, address, uint256);
+Mint(address, uint256, uint256);
+Swap(address, uint256, uint256, uint256, uint256, address);
+Sync(uint256, uint256);
+
+function 0x1104(uint256 varg0, address varg1, address varg2) private { 
+    v0 = _SafeSub(_balanceOf[varg2], varg0);
+    _balanceOf[varg2] = v0;
+    v1 = _SafeAdd(_balanceOf[varg1], varg0);
+    _balanceOf[varg1] = v1;
+    emit Transfer(varg2, varg1, varg0);
+    return ;
+}
+
+function 0x11aa(uint256 varg0, address varg1, address varg2) private { 
+    if (this.balance >= 0) {
+        if (varg2.code.size) {
+            v0 = v1 = 0;
+            while (v0 < 68) {
+                MEM[v0 + MEM[64]] = MEM[v0 + (MEM[64] + 32)];
+                v0 += 32;
+            }
+            MEM[68 + MEM[64]] = 0;
+            v2, /* uint256 */ v3, /* uint256 */ v4, /* uint256 */ v5 = varg2.transfer(varg1, varg0).gas(msg.gas);
+            if (RETURNDATASIZE() == 0) {
+                v6 = v7 = 96;
+            } else {
+                v6 = v8 = new bytes[](RETURNDATASIZE());
+                RETURNDATACOPY(v8.data, 0, RETURNDATASIZE());
+            }
+            if (!v2) {
+                require(!MEM[v6], v5, MEM[v6]);
+                v9 = new bytes[](v10.length);
+                v11 = v12 = 0;
+                while (v11 < v10.length) {
+                    v9[v11] = v10[v11];
+                    v11 += 32;
+                }
+                v9[v10.length] = 0;
+                revert(Error(v9, v13, 'SafeERC20: low-level call failed'));
+            } else {
+                if (MEM[v6]) {
+                    require(32 + v6 + MEM[v6] - (32 + v6) >= 32);
+                    require(MEM[32 + v6] == bool(MEM[32 + v6]));
+                    require(MEM[32 + v6], Error('SafeERC20: ERC20 operation did not succeed'));
+                }
+                return ;
+            }
+        } else {
+            MEM[MEM[64] + 4] = 32;
+            revert(Error('Address: call to non-contract'));
+        }
+    } else {
+        MEM[MEM[64] + 4] = 32;
+        revert(Error('Address: insufficient balance for call'));
+    }
+}
+
+function 0x1212(uint256 varg0, uint256 varg1, uint256 varg2) private { 
+    require(varg2 > 0, Error('NaryaSwapLibrary: INSUFFICIENT_INPUT_AMOUNT'));
+    v0 = v1 = varg1 > 0;
+    if (v1) {
+        v0 = v2 = varg0 > 0;
+    }
+    require(v0, Error('NaryaSwapLibrary: INSUFFICIENT_LIQUIDITY'));
+    v3 = _SafeMul(997, varg2);
+    v4 = _SafeMul(varg0, v3);
+    v5 = _SafeMul(1000, varg1);
+    v6 = _SafeAdd(v5, v3);
+    require(v6, Panic(18)); // division by zero
+    return v4 / v6;
+}
+
+function 0x12e5(uint256 varg0, address varg1, address varg2, uint256 varg3) private { 
+    if (this.balance >= 0) {
+        if ((address(varg3)).code.size) {
+            v0 = v1 = 0;
+            while (v0 < 100) {
+                MEM[v0 + MEM[64]] = MEM[v0 + (MEM[64] + 32)];
+                v0 += 32;
+            }
+            MEM[100 + MEM[64]] = 0;
+            v2, /* uint256 */ v3, /* uint256 */ v4, /* uint256 */ v5 = address(varg3).transferFrom(varg2, varg1, varg0).gas(msg.gas);
+            if (RETURNDATASIZE() == 0) {
+                v6 = v7 = 96;
+            } else {
+                v6 = v8 = new bytes[](RETURNDATASIZE());
+                RETURNDATACOPY(v8.data, 0, RETURNDATASIZE());
+            }
+            if (!v2) {
+                require(!MEM[v6], v5, MEM[v6]);
+                v9 = new bytes[](v10.length);
+                v11 = v12 = 0;
+                while (v11 < v10.length) {
+                    v9[v11] = v10[v11];
+                    v11 += 32;
+                }
+                v9[v10.length] = 0;
+                revert(Error(v9, v13, 'SafeERC20: low-level call failed'));
+            } else {
+                if (MEM[v6]) {
+                    require(32 + v6 + MEM[v6] - (32 + v6) >= 32);
+                    require(MEM[32 + v6] == bool(MEM[32 + v6]));
+                    require(MEM[32 + v6], Error('SafeERC20: ERC20 operation did not succeed'));
+                    // Unknown jump to Block 0x131d. Refer to 3-address code (TAC);
+                }
+                return ;
+            }
+        } else {
+            MEM[MEM[64] + 4] = 32;
+            revert(Error('Address: call to non-contract'));
+        }
+    } else {
+        MEM[MEM[64] + 4] = 32;
+        revert(Error('Address: insufficient balance for call'));
+    }
+}
+
+function 0x1323(uint256 varg0, address varg1) private { 
+    v0 = v1 = 0;
+    while (v0 < 0) {
+        MEM[v0 + MEM[64]] = MEM[v0 + (MEM[64] + 32)];
+        v0 += 32;
+    }
+    MEM[0 + MEM[64]] = 0;
+    v2, /* uint256 */ v3 = varg1.call().value(varg0).gas(msg.gas);
+    if (RETURNDATASIZE() != 0) {
+        v4 = new bytes[](RETURNDATASIZE());
+        v3 = v4.data;
+        RETURNDATACOPY(v3, 0, RETURNDATASIZE());
+    }
+    require(v2, Error('ETH transfer failed'));
+    return ;
+}
+
+function 0x13e2(uint256 varg0, uint256 varg1, uint256 varg2, uint256 varg3) private { 
+    v0 = v1 = msg.value > 0;
+    if (v1) {
+        v0 = v2 = varg3 > 0;
+    }
+    require(v0, Error('invalid amounts'));
+    v3 = _SafeSub(this.balance, msg.value);
+    v4, /* uint256 */ v5 = _token1.balanceOf(this).gas(msg.gas);
+    require(bool(v4), 0, RETURNDATASIZE()); // checks call status, propagates error data on error
+    require(MEM[64] + RETURNDATASIZE() - MEM[64] >= 32);
+    if (_totalSupply) {
+        v6 = _SafeMul(v5, msg.value);
+        varg3 = v7 = _SafeDiv(v3, v6);
+        require(v7 >= varg3, Error('wrong token ratio'));
+        require(v7 <= varg2, Error('wrong token ratio'));
+    }
+    0x12e5(varg3, this, varg1, _token1);
+    v8, /* uint256 */ v9 = _token1.balanceOf(this).gas(msg.gas);
+    require(bool(v8), 0, RETURNDATASIZE()); // checks call status, propagates error data on error
+    require(MEM[64] + RETURNDATASIZE() - MEM[64] >= 32);
+    v10 = _SafeSub(v9, varg3);
+    require(v5 == v10, Error('deflationary tokens not supported'));
+    if (0 - _totalSupply) {
+        v11 = _SafeMul(_totalSupply, msg.value);
+        require(v3, Panic(18)); // division by zero
+        v12 = _SafeMul(_totalSupply, varg3);
+        require(v5, Panic(18)); // division by zero
+        v13 = v14 = 0x1bbc(v12 / v5, v11 / v3);
+    } else {
+        v15 = _SafeMul(varg3, msg.value);
+        v16 = 0x1ac9(v15);
+        v13 = v17 = _SafeSub(v16, 1000);
+        0x1b39(1000, 0);
+    }
+    require(v13 > 0, Error('liquidity mint issue'));
+    v18, /* uint256 */ v19 = _factory.fee().gas(msg.gas);
+    require(bool(v18), 0, RETURNDATASIZE()); // checks call status, propagates error data on error
+    require(MEM[64] + RETURNDATASIZE() - MEM[64] >= 32);
+    if (v19) {
+        v20 = _SafeMul(v19, v13);
+        v21 = _SafeDiv(0x186a0, v20);
+        v22, /* address */ v23 = _factory.protocolManager().gas(msg.gas);
+        require(bool(v22), 0, RETURNDATASIZE()); // checks call status, propagates error data on error
+        require(MEM[64] + RETURNDATASIZE() - MEM[64] >= 32);
+        require(v23 == address(v23));
+        v24 = _SafeAdd(_totalSupply, v21);
+        _totalSupply = v24;
+        v25 = _SafeAdd(_balanceOf[address(v23)], v21);
+        _balanceOf[address(v23)] = v25;
+        emit Transfer(0, address(v23), v21);
+        v13 = _SafeSub(v13, v21);
+    }
+    0x1b39(v13, varg0);
+    emit Mint(address(varg1), msg.value, varg3);
+    return v13;
+}
+
+function () public payable { 
+    revert();
+}
+
+function name() public nonPayable { 
+    v0 = new bytes[](v1.length);
+    v2 = v3 = 0;
+    while (v2 < v1.length) {
+        v0[v2] = v1[v2];
+        v2 += 32;
+    }
+    v0[v1.length] = 0;
+    return v0, v4, 'PWNSwap LP';
+}
+
+function 0x187e(uint256 varg0, uint256 varg1, uint256 varg2) private { 
+    require(varg2 > 0, Error('NaryaSwapLibrary: INSUFFICIENT_OUTPUT_AMOUNT'));
+    v0 = v1 = varg1 > 0;
+    if (v1) {
+        v0 = v2 = varg0 > 0;
+    }
+    require(v0, Error('NaryaSwapLibrary: INSUFFICIENT_LIQUIDITY'));
+    v3 = _SafeMul(varg2, varg1);
+    v4 = _SafeMul(1000, v3);
+    v5 = _SafeSub(varg0, varg2);
+    v6 = _SafeMul(997, v5);
+    require(v6, Panic(18)); // division by zero
+    v7 = _SafeAdd(v4 / v6, 1);
+    return v7;
+}
+
+function _SafeMul(uint256 varg0, uint256 varg1) private { 
+    require((varg0 == varg0 * varg1 / varg1) | !varg1, Panic(17)); // arithmetic overflow or underflow
+    return varg0 * varg1;
+}
+
+function _SafeDiv(uint256 varg0, uint256 varg1) private { 
+    require(varg0, Panic(18)); // division by zero
+    return varg1 / varg0;
+}
+
+function 0x1ac9(uint256 varg0) private { 
+    v0 = v1 = 0;
+    if (varg0 <= 3) {
+        if (varg0) {
+            v0 = v2 = 1;
+        }
+        return v0;
+    } else {
+        require(2, Panic(18)); // division by zero
+        varg0 = v3 = _SafeAdd(1, varg0 >> 1);
+        while (varg0 < varg0) {
+            require(varg0, Panic(18)); // division by zero
+            v4 = _SafeAdd(varg0 / varg0, varg0);
+            require(2, Panic(18)); // division by zero
+            varg0 = v4 >> 1;
+        }
+        return varg0;
+    }
+}
+
+function 0x1b39(uint256 varg0, address varg1) private { 
+    v0 = _SafeAdd(_totalSupply, varg0);
+    _totalSupply = v0;
+    v1 = _SafeAdd(_balanceOf[varg1], varg0);
+    _balanceOf[varg1] = v1;
+    emit Transfer(0, varg1, varg0);
+    return ;
+}
+
+function getReserves() public nonPayable { 
+    v0, /* uint256 */ v1 = _token1.balanceOf(this).gas(msg.gas);
+    require(bool(v0), 0, RETURNDATASIZE()); // checks call status, propagates error data on error
+    require(MEM[64] + RETURNDATASIZE() - MEM[64] >= 32);
+    return this.balance, v1, block.timestamp;
+}
+
+function 0x1bbc(uint256 varg0, uint256 varg1) private { 
+    if (varg1 < varg0) {
+        return varg1;
+    } else {
+        return varg0;
+    }
+}
+
+function approve(address varg0, uint256 varg1) public nonPayable { 
+    require(msg.data.length - 4 >= 64);
+    require(varg0 == varg0);
+    _allowance[msg.sender][varg0] = varg1;
+    emit Approval(msg.sender, varg0, varg1);
+    return bool(1);
+}
+
+function _SafeSub(uint256 varg0, uint256 varg1) private { 
+    require(varg0 - varg1 <= varg0, Panic(17)); // arithmetic overflow or underflow
+    return varg0 - varg1;
+}
+
+function _SafeAdd(uint256 varg0, uint256 varg1) private { 
+    require(varg0 <= varg1 + varg0, Panic(17)); // arithmetic overflow or underflow
+    return varg1 + varg0;
+}
+
+function token0() public nonPayable { 
+    return address(0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee);
+}
+
+function totalSupply() public nonPayable { 
+    return _totalSupply;
+}
+
+function transferFrom(address varg0, address varg1, uint256 varg2) public nonPayable { 
+    require(msg.data.length - 4 >= 96);
+    require(varg0 == varg0);
+    require(varg1 == varg1);
+    if (~0 != _allowance[varg0][msg.sender]) {
+        v0 = _SafeSub(_allowance[varg0][msg.sender], varg2);
+        _allowance[varg0][msg.sender] = v0;
+    }
+    0x1104(varg2, varg1, varg0);
+    return bool(1);
+}
+
+function decimals() public nonPayable { 
+    return uint8(18);
+}
+
+function reserve0() public nonPayable { 
+    return this.balance;
+}
+
+function rescueTokens(address varg0, address varg1) public nonPayable { 
+    require(msg.data.length - 4 >= 64);
+    require(varg0 == varg0);
+    require(varg1 == varg1);
+    require(msg.sender == _factory, Error('dont be so smart'));
+    require(varg0 - _token1, Error("can't rescue base token"));
+    v0, /* uint256 */ v1 = varg0.balanceOf(this).gas(msg.gas);
+    require(bool(v0), 0, RETURNDATASIZE()); // checks call status, propagates error data on error
+    require(MEM[64] + RETURNDATASIZE() - MEM[64] >= 32);
+    if (this.balance >= 0) {
+        if (varg0.code.size) {
+            v2 = v3 = 0;
+            while (v2 < 68) {
+                MEM[v2 + MEM[64]] = MEM[v2 + (MEM[64] + 32)];
+                v2 += 32;
+            }
+            MEM[68 + MEM[64]] = 0;
+            v4, /* uint256 */ v5, /* uint256 */ v6, /* uint256 */ v7 = varg0.transfer(varg1, v1).gas(msg.gas);
+            if (RETURNDATASIZE() == 0) {
+                v8 = v9 = 96;
+            } else {
+                v8 = v10 = new bytes[](RETURNDATASIZE());
+                RETURNDATACOPY(v10.data, 0, RETURNDATASIZE());
+            }
+            if (!v4) {
+                require(!MEM[v8], v7, MEM[v8]);
+                v11 = new bytes[](v12.length);
+                v13 = v14 = 0;
+                while (v13 < v12.length) {
+                    v11[v13] = v12[v13];
+                    v13 += 32;
+                }
+                v11[v12.length] = 0;
+                revert(Error(v11, v15, 'SafeERC20: low-level call failed'));
+            } else {
+                if (MEM[v8]) {
+                    require(32 + v8 + MEM[v8] - (32 + v8) >= 32);
+                    require(MEM[32 + v8] == bool(MEM[32 + v8]));
+                    require(MEM[32 + v8], Error('SafeERC20: ERC20 operation did not succeed'));
+                }
+                exit;
+            }
+        } else {
+            MEM[MEM[64] + 4] = 32;
+            revert(Error('Address: call to non-contract'));
+        }
+    } else {
+        MEM[MEM[64] + 4] = 32;
+        revert(Error('Address: insufficient balance for call'));
+    }
+}
+
+function reserve1() public nonPayable { 
+    v0, /* uint256 */ v1 = _token1.balanceOf(this).gas(msg.gas);
+    require(bool(v0), 0, RETURNDATASIZE()); // checks call status, propagates error data on error
+    require(MEM[64] + RETURNDATASIZE() - MEM[64] >= 32);
+    return v1;
+}
+
+function swapExactTokensForETH(uint256 varg0, uint256 varg1, address varg2, uint256 varg3) public nonPayable { 
+    require(msg.data.length - 4 >= 128);
+    require(varg2 == varg2);
+    require(varg3 >= block.timestamp, Error('txn expired'));
+    v0, /* uint256 */ v1 = _token1.balanceOf(this).gas(msg.gas);
+    require(bool(v0), 0, RETURNDATASIZE()); // checks call status, propagates error data on error
+    require(MEM[64] + RETURNDATASIZE() - MEM[64] >= 32);
+    v2 = 0x1212(this.balance, v1, varg0);
+    require(varg1 <= v2, Error('slippage issue'));
+    0x12e5(varg0, this, msg.sender, _token1);
+    0x1323(v2, varg2);
+    emit Swap(msg.sender, varg2, 0, varg0, v2, 0);
+    v3 = _SafeSub(this.balance, v2);
+    v4 = _SafeAdd(v1, varg0);
+    emit Sync(v3, v4);
+    return v2;
+}
+
+function 0x5ce974fa(uint256 varg0, uint256 varg1, address varg2, address varg3, uint256 varg4) public payable { 
+    require(msg.data.length - 4 >= 160);
+    require(varg2 == varg2);
+    require(varg3 == varg3);
+    require(varg4 >= block.timestamp, Error('txn expired'));
+    require(msg.sender == _factory, Error('dont be so smart'));
+    v0 = 0x13e2(varg3, varg2, varg1, varg0);
+    return v0;
+}
+
+function setup(address varg0) public nonPayable { 
+    require(msg.data.length - 4 >= 32);
+    require(varg0 == varg0);
+    require(!_setup, Error('Already Setup'));
+    _token1 = varg0;
+    _factory = msg.sender;
+    _setup = 1;
+}
+
+function balanceOf(address varg0) public nonPayable { 
+    require(msg.data.length - 4 >= 32);
+    require(varg0 == varg0);
+    return _balanceOf[varg0];
+}
+
+function 0x75f355f9(uint256 varg0, uint256 varg1, address varg2, uint256 varg3) public payable { 
+    require(msg.data.length - 4 >= 128);
+    require(varg2 == varg2);
+    require(varg3 >= block.timestamp, Error('txn expired'));
+    v0 = 0x13e2(varg2, msg.sender, varg1, varg0);
+    return v0;
+}
+
+function symbol() public nonPayable { 
+    v0 = new bytes[](v1.length);
+    v2 = v3 = 0;
+    while (v2 < v1.length) {
+        v0[v2] = v1[v2];
+        v2 += 32;
+    }
+    v0[v1.length] = 0;
+    return v0, v4, 'PWNSwap-LP';
+}
+
+function transfer(address varg0, uint256 varg1) public nonPayable { 
+    require(msg.data.length - 4 >= 64);
+    require(varg0 == varg0);
+    0x1104(varg1, varg0, msg.sender);
+    return bool(1);
+}
+
+function swapTokensForExactETH(uint256 varg0, uint256 varg1, address varg2, uint256 varg3) public nonPayable { 
+    require(msg.data.length - 4 >= 128);
+    require(varg2 == varg2);
+    require(varg3 >= block.timestamp, Error('txn expired'));
+    v0, /* uint256 */ v1 = _token1.balanceOf(this).gas(msg.gas);
+    require(bool(v0), 0, RETURNDATASIZE()); // checks call status, propagates error data on error
+    require(MEM[64] + RETURNDATASIZE() - MEM[64] >= 32);
+    v2 = 0x187e(this.balance, v1, varg0);
+    require(v2 <= varg1, Error('slippage issue'));
+    0x12e5(v2, this, msg.sender, _token1);
+    0x1323(varg0, varg2);
+    emit Swap(msg.sender, varg2, 0, v2, varg0, 0);
+    v3 = _SafeSub(this.balance, varg0);
+    v4 = _SafeAdd(v1, v2);
+    emit Sync(v3, v4);
+    return v2;
+}
+
+function factory() public nonPayable { 
+    return _factory;
+}
+
+function removeLiquidity(uint256 varg0, address varg1, uint256 varg2) public nonPayable { 
+    require(msg.data.length - 4 >= 96);
+    require(varg1 == varg1);
+    require(varg2 >= block.timestamp, Error('txn expired'));
+    require(varg0 > 0, Error('no liquidity'));
+    v0, /* uint256 */ v1 = _token1.balanceOf(this).gas(msg.gas);
+    require(bool(v0), 0, RETURNDATASIZE()); // checks call status, propagates error data on error
+    require(MEM[64] + RETURNDATASIZE() - MEM[64] >= 32);
+    v2 = _SafeMul(this.balance, varg0);
+    require(_totalSupply, Panic(18)); // division by zero
+    v3 = _SafeMul(v1, varg0);
+    require(_totalSupply, Panic(18)); // division by zero
+    v4 = v5 = v2 / _totalSupply > 0;
+    if (v5) {
+        v4 = v6 = v3 / _totalSupply > 0;
+    }
+    require(v4, Error('liquidity burn issue'));
+    v7 = _SafeSub(_balanceOf[msg.sender], varg0);
+    _balanceOf[msg.sender] = v7;
+    v8 = _SafeSub(_totalSupply, varg0);
+    _totalSupply = v8;
+    emit Transfer(msg.sender, 0, varg0);
+    0x11aa(v3 / _totalSupply, varg1, _token1);
+    0x1323(v2 / _totalSupply, varg1);
+    emit Burn(msg.sender, varg1, v2 / _totalSupply, v3 / _totalSupply);
+    return v2 / _totalSupply, v3 / _totalSupply;
+}
+
+function token1() public nonPayable { 
+    return _token1;
+}
+
+function allowance(address varg0, address varg1) public nonPayable { 
+    require(msg.data.length - 4 >= 64);
+    require(varg0 == varg0);
+    require(varg1 == varg1);
+    return _allowance[varg0][varg1];
+}
+
+function swapETHForExactTokens(uint256 varg0, address varg1, uint256 varg2) public payable { 
+    require(msg.data.length - 4 >= 96);
+    require(varg1 == varg1);
+    require(varg2 >= block.timestamp, Error('txn expired'));
+    v0 = _SafeSub(this.balance, msg.value);
+    v1, /* uint256 */ v2 = _token1.balanceOf(this).gas(msg.gas);
+    require(bool(v1), 0, RETURNDATASIZE()); // checks call status, propagates error data on error
+    require(MEM[64] + RETURNDATASIZE() - MEM[64] >= 32);
+    v3 = 0x187e(v2, v0, varg0);
+    require(v3 <= msg.value, Error('slippage issue'));
+    0x11aa(varg0, varg1, _token1);
+    if (msg.value > v3) {
+        v4 = _SafeSub(msg.value, v3);
+        0x1323(v4, msg.sender);
+    }
+    emit Swap(msg.sender, varg1, v3, 0, 0, varg0);
+    v5 = _SafeAdd(v0, v3);
+    v6 = _SafeSub(v2, varg0);
+    emit Sync(v5, v6);
+    return v3;
+}
+
+function token() public nonPayable { 
+    return _token1;
+}
+
+function swapExactETHForTokens(uint256 varg0, address varg1, uint256 varg2) public payable { 
+    require(msg.data.length - 4 >= 96);
+    require(varg1 == varg1);
+    require(varg2 >= block.timestamp, Error('txn expired'));
+    v0 = _SafeSub(this.balance, msg.value);
+    v1, /* uint256 */ v2 = _token1.balanceOf(this).gas(msg.gas);
+    require(bool(v1), 0, RETURNDATASIZE()); // checks call status, propagates error data on error
+    require(MEM[64] + RETURNDATASIZE() - MEM[64] >= 32);
+    v3 = 0x1212(v2, v0, msg.value);
+    require(varg0 <= v3, Error('slippage issue'));
+    0x11aa(v3, varg1, _token1);
+    emit Swap(msg.sender, varg1, msg.value, 0, 0, v3);
+    v4 = _SafeAdd(v0, msg.value);
+    v5 = _SafeSub(v2, v3);
+    emit Sync(v4, v5);
+    return v3;
+}
+
+// Note: The function selector is not present in the original solidity code.
+// However, we display it for the sake of completeness.
+
+function __function_selector__(bytes4 function_selector) public payable { 
+    MEM[64] = 128;
+    if (msg.data.length >= 4) {
+        if (0x66d38203 > function_selector >> 224) {
+            if (0x313ce567 > function_selector >> 224) {
+                if (0x6fdde03 == function_selector >> 224) {
+                    name();
+                } else if (0x902f1ac == function_selector >> 224) {
+                    getReserves();
+                } else if (0x95ea7b3 == function_selector >> 224) {
+                    approve(address,uint256);
+                } else if (0xdfe1681 == function_selector >> 224) {
+                    token0();
+                } else if (0x18160ddd == function_selector >> 224) {
+                    totalSupply();
+                } else if (0x23b872dd == function_selector >> 224) {
+                    transferFrom(address,address,uint256);
+                }
+            } else if (0x313ce567 == function_selector >> 224) {
+                decimals();
+            } else if (0x443cb4bc == function_selector >> 224) {
+                reserve0();
+            } else if (0x5431c94e == function_selector >> 224) {
+                rescueTokens(address,address);
+            } else if (0x5a76f25e == function_selector >> 224) {
+                reserve1();
+            } else if (0x5c7e072b == function_selector >> 224) {
+                swapExactTokensForETH(uint256,uint256,address,uint256);
+            } else {
+                require(0x5ce974fa == function_selector >> 224);
+                0x5ce974fa();
+            }
+        } else if (0xc45a0155 > function_selector >> 224) {
+            if (0x66d38203 == function_selector >> 224) {
+                setup(address);
+            } else if (0x70a08231 == function_selector >> 224) {
+                balanceOf(address);
+            } else if (0x75f355f9 == function_selector >> 224) {
+                0x75f355f9();
+            } else if (0x95d89b41 == function_selector >> 224) {
+                symbol();
+            } else if (0xa9059cbb == function_selector >> 224) {
+                transfer(address,uint256);
+            } else {
+                require(0xaa20a83a == function_selector >> 224);
+                swapTokensForExactETH(uint256,uint256,address,uint256);
+            }
+        } else if (0xdd62ed3e > function_selector >> 224) {
+            if (0xc45a0155 == function_selector >> 224) {
+                factory();
+            } else if (0xc4ccdeea == function_selector >> 224) {
+                removeLiquidity(uint256,address,uint256);
+            } else {
+                require(0xd21220a7 == function_selector >> 224);
+                token1();
+            }
+        } else if (0xdd62ed3e == function_selector >> 224) {
+            allowance(address,address);
+        } else if (0xe8063bea == function_selector >> 224) {
+            swapETHForExactTokens(uint256,address,uint256);
+        } else if (0xfc0c546a == function_selector >> 224) {
+            token();
+        } else {
+            require(0xffee770f == function_selector >> 224);
+            swapExactETHForTokens(uint256,address,uint256);
+        }
+    }
+    ();
+}

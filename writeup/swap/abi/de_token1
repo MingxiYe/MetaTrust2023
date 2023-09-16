@@ -1,0 +1,754 @@
+// Data structures and variables inferred from the use of storage instructions
+mapping (uint256 => struct_815) owner_1; // STORAGE[0x1]
+uint256 _totalSupply; // STORAGE[0x2]
+uint256 _exchangeRate; // STORAGE[0x3]
+uint256[] array_4; // STORAGE[0x4]
+uint256[] array_5; // STORAGE[0x5]
+uint256[] array_7; // STORAGE[0x7]
+mapping (uint256 => mapping (uint256 => uint256)) _revokeOperator; // STORAGE[0x8]
+mapping (uint256 => mapping (uint256 => uint256)) _allowance; // STORAGE[0x9]
+mapping (uint256 => uint256) map_b; // STORAGE[0xb]
+uint256 stor_0_0_19; // STORAGE[0x0] bytes 0 to 19
+uint256 _decimals; // STORAGE[0x6] bytes 0 to 0
+uint256 _owner; // STORAGE[0xa] bytes 0 to 19
+uint256 _revenueAddress; // STORAGE[0xc] bytes 0 to 19
+
+struct struct_815 { uint256 field0; uint256 field1; };
+
+// Events
+RevenueAddressSet(address);
+AuthorizedOperator(address, address);
+RevokedOperator(address, address);
+Approval(address, address, uint256);
+RevenueDistributed(address, uint256, uint256, uint256);
+MinterRemoved(address, address);
+OwnershipTransferred(address, address);
+MinterAdded(address, address);
+Minted(address, address, uint256, bytes, bytes);
+Burned(address, address, uint256, bytes, bytes);
+Transfer(address, address, uint256);
+
+function 0x11de(uint256 varg0, bytes varg1, bytes varg2, uint256 varg3, uint256 varg4, uint256 varg5, uint256 varg6) private { 
+    require(address(varg5), Error('ERC777: send from the zero address'));
+    require(address(varg4), Error('ERC777: send to the zero address'));
+    0x1756(varg1, varg2, varg3, varg4, varg5, varg6);
+    0x186d(varg1, varg2, varg3, varg4, varg5, varg6);
+    0x1940(varg0, varg1, varg2, varg3, varg4, varg5, varg6);
+    return ;
+}
+
+function 0x1409(address varg0, uint256 varg1) private { 
+    require(varg0, Error('Roles: account is the zero address'));
+    return uint8(STORAGE[keccak256(address(varg0), varg1)]);
+}
+
+function 0x148c(address varg0) private { 
+    MEM[MEM[64]] = 0;
+    MEM[MEM[64] + 32] = 0;
+    v0 = new struct(2);
+    v0.word0 = owner_1[varg0].field0;
+    v0.word1 = owner_1[varg0].field1;
+    if (owner_1[varg0].field0) {
+        if (v0.word1 == _exchangeRate) {
+            return v0;
+        } else {
+            v1 = _SafeMul(_exchangeRate, v0.word0);
+            v2 = _SafeDiv(v0.word1, v1);
+            v0.word0 = v2;
+            v0.word1 = _exchangeRate;
+            return v0;
+        }
+    } else {
+        v0.word0 = 0;
+        v0.word1 = _exchangeRate;
+        return v0;
+    }
+}
+
+function 0x163a(bytes varg0, bytes varg1, uint256 varg2, uint256 varg3, uint256 varg4) private { 
+    require(address(varg3), Error('ERC777: burn from the zero address'));
+    0x1756(varg0, varg1, varg2, 0, varg3, varg4);
+    v0 = _SafeMul(0xde0b6b3a7640000, varg2);
+    v1 = _SafeSub(v0, _totalSupply);
+    _totalSupply = v1;
+    v2 = 0x148c(varg3);
+    v3 = _SafeSub(v0, v2.word0);
+    v2.word0 = v3;
+    owner_1[address(varg3)].field0 = v2.word0;
+    owner_1[address(varg3)].field1 = v2.word1;
+    v4 = new bytes[](varg1.length);
+    v5 = 0;
+    while (v5 < varg1.length) {
+        v4[v5] = varg1[v5];
+        v5 += 32;
+    }
+    v4[varg1.length] = 0;
+    v6 = new bytes[](varg0.length);
+    v4[varg1.length + 31 & ~0x1f] = varg0.length;
+    v7 = 0;
+    while (v7 < varg0.length) {
+        v6[v7] = varg0[v7];
+        v7 += 32;
+    }
+    v6[varg0.length] = 0;
+    emit Burned(address(varg4), address(varg3), varg2, v4, v6);
+    emit Transfer(address(varg3), 0, varg2);
+    return ;
+}
+
+function 0x1756(bytes varg0, bytes varg1, uint256 varg2, address varg3, address varg4, address varg5) private { 
+    v0, /* address */ v1 = stor_0_0_19.getInterfaceImplementer(varg4, 0x29ddb589b1fb5fc7cf394961c1adf5f8c6454761adf795e67fe149f658abe895).gas(msg.gas);
+    require(bool(v0), 0, RETURNDATASIZE()); // checks call status, propagates error data on error
+    require(MEM[64] + RETURNDATASIZE() - MEM[64] >= 32);
+    require(v1 == address(v1));
+    if (!address(v1)) {
+        return ;
+    } else {
+        v2 = new bytes[](varg1.length);
+        v3 = 0;
+        while (v3 < varg1.length) {
+            v2[v3] = varg1[v3];
+            v3 += 32;
+        }
+        v2[varg1.length] = 0;
+        v4 = new bytes[](varg0.length);
+        v2[varg1.length + 31 & ~0x1f] = varg0.length;
+        v5 = 0;
+        while (v5 < varg0.length) {
+            v4[v5] = varg0[v5];
+            v5 += 32;
+        }
+        v4[varg0.length] = 0;
+        require(bool((address(v1)).code.size));
+        v6 = address(v1).tokensToSend(varg5, varg4, varg3, varg2, v2, v4).gas(msg.gas);
+        require(bool(v6), 0, RETURNDATASIZE()); // checks call status, propagates error data on error
+        return ;
+    }
+}
+
+function 0x186d(bytes varg0, bytes varg1, uint256 varg2, uint256 varg3, uint256 varg4, address varg5) private { 
+    v0 = _SafeMul(0xde0b6b3a7640000, varg2);
+    v1 = 0x148c(varg4);
+    v2 = _SafeSub(v0, v1.word0);
+    v1.word0 = v2;
+    owner_1[address(varg4)].field0 = v1.word0;
+    owner_1[address(varg4)].field1 = v1.word1;
+    v3 = 0x148c(varg3);
+    v4 = _SafeAdd(v0, v3.word0);
+    v3.word0 = v4;
+    owner_1[address(varg3)].field0 = v3.word0;
+    owner_1[address(varg3)].field1 = v3.word1;
+    v5 = new bytes[](varg1.length);
+    v6 = 0;
+    while (v6 < varg1.length) {
+        v5[v6] = varg1[v6];
+        v6 += 32;
+    }
+    v5[varg1.length] = 0;
+    v7 = new bytes[](varg0.length);
+    v5[varg1.length + 31 & ~0x1f] = varg0.length;
+    v8 = 0;
+    while (v8 < varg0.length) {
+        v7[v8] = varg0[v8];
+        v8 += 32;
+    }
+    v7[varg0.length] = 0;
+    emit 0x6b541ddaa720db2b10a4d0cdac39b8d360425fc073085fac19bc82614677987(varg5, address(varg4), address(varg3), varg2, v5, v7);
+    emit Transfer(address(varg4), address(varg3), varg2);
+    return ;
+}
+
+function _SafeSub(uint256 varg0, uint256 varg1) private { 
+    require(varg1 - varg0 <= varg1, Panic(17)); // arithmetic overflow or underflow
+    return varg1 - varg0;
+}
+
+function 0x1940(uint256 varg0, bytes varg1, bytes varg2, uint256 varg3, address varg4, address varg5, address varg6) private { 
+    v0, /* address */ v1 = stor_0_0_19.getInterfaceImplementer(varg4, 0xb281fc8c12954d22544db45de3159a39272895b169a852b314f9cc762e44c53b).gas(msg.gas);
+    require(bool(v0), 0, RETURNDATASIZE()); // checks call status, propagates error data on error
+    require(MEM[64] + RETURNDATASIZE() - MEM[64] >= 32);
+    require(v1 == address(v1));
+    if (!address(v1)) {
+        if (!varg0) {
+            return ;
+        } else {
+            require(!varg4.code.size, Error('ERC777: token recipient contract has no implementer for ERC777TokensRecipient'));
+            return ;
+        }
+    } else {
+        v2 = new bytes[](varg2.length);
+        v3 = 0;
+        while (v3 < varg2.length) {
+            v2[v3] = varg2[v3];
+            v3 += 32;
+        }
+        v2[varg2.length] = 0;
+        v4 = new bytes[](varg1.length);
+        v2[varg2.length + 31 & ~0x1f] = varg1.length;
+        v5 = 0;
+        while (v5 < varg1.length) {
+            v4[v5] = varg1[v5];
+            v5 += 32;
+        }
+        v4[varg1.length] = 0;
+        require(bool((address(v1)).code.size));
+        v6 = address(v1).tokensReceived(varg6, varg5, varg4, varg3, v2, v4).gas(msg.gas);
+        require(bool(v6), 0, RETURNDATASIZE()); // checks call status, propagates error data on error
+        return ;
+    }
+}
+
+function _SafeMul(uint256 varg0, uint256 varg1) private { 
+    require((varg0 == varg0 * varg1 / varg1) | !varg1, Panic(17)); // arithmetic overflow or underflow
+    return varg0 * varg1;
+}
+
+function _SafeAdd(uint256 varg0, uint256 varg1) private { 
+    require(varg1 <= varg0 + varg1, Panic(17)); // arithmetic overflow or underflow
+    return varg0 + varg1;
+}
+
+function () public payable { 
+    revert();
+}
+
+function defaultOperators() public payable { 
+    v0 = 0x44e();
+    v1 = new address[](v0.length);
+    v2 = v3 = 0;
+    v4 = v5 = v0.data;
+    v6 = v7 = v1.data;
+    while (v2 < v0.length) {
+        MEM[v6] = address(MEM[v4]);
+        v4 += 32;
+        v6 += 32;
+        v2 += 1;
+    }
+    return v1;
+}
+
+function 0x2015(uint256 varg0) private { 
+    v0 = v1 = varg0 >> 1;
+    if (!(varg0 & 0x1)) {
+        v0 = v2 = v1 & 0x7f;
+    }
+    require((varg0 & 0x1) - (v0 < 32), Panic(34)); // access to incorrectly encoded storage byte array
+    return v0;
+}
+
+function name() public payable { 
+    v0 = 0x4b0();
+    v1 = new bytes[](v0.length);
+    v2 = 0;
+    while (v2 < v0.length) {
+        v1[v2] = v0[v2];
+        v2 += 32;
+    }
+    v1[v0.length] = 0;
+    return v1;
+}
+
+function approve(address varg0, uint256 varg1) public payable { 
+    require(msg.data.length - 4 >= 64);
+    require(varg0 == varg0);
+    0xd4c(varg1, varg0, msg.sender);
+    return bool(1);
+}
+
+function totalSupply() public payable { 
+    v0 = _SafeDiv(0xde0b6b3a7640000, _totalSupply);
+    return v0;
+}
+
+function transferFrom(address varg0, address varg1, uint256 varg2) public payable { 
+    require(msg.data.length - 4 >= 96);
+    require(varg0 == varg0);
+    require(varg1 == varg1);
+    require(varg1, Error('ERC777: transfer to the zero address'));
+    require(varg0, Error('ERC777: transfer from the zero address'));
+    MEM[MEM[64]] = 0;
+    MEM[MEM[64]] = 0;
+    0x1756(MEM[64], MEM[64], varg2, varg1, varg0, msg.sender);
+    MEM[MEM[64]] = 0;
+    MEM[MEM[64]] = 0;
+    0x186d(MEM[64], MEM[64], varg2, varg1, varg0, msg.sender);
+    v0 = _SafeSub(varg2, _allowance[varg0][msg.sender]);
+    0xd4c(v0, msg.sender, varg0);
+    MEM[MEM[64]] = 0;
+    MEM[MEM[64]] = 0;
+    0x1940(0, MEM[64], MEM[64], varg2, varg1, varg0, msg.sender);
+    return bool(1);
+}
+
+function distributeRevenue() public payable { 
+    require(_revenueAddress, Error('Token: revenue address must not be zero'));
+    v0 = 0x148c(_revenueAddress);
+    require(v0.word0, Error('Token: the revenue balance must be large than zero'));
+    require(_totalSupply > v0.word0, Error('Token: total supply must be large than revenue'));
+    owner_1[_revenueAddress].field0 = 0;
+    owner_1[_revenueAddress].field1 = 0;
+    v1 = _SafeSub(v0.word0, _totalSupply);
+    v2 = _SafeMul(0xde0b6b3a7640000, _totalSupply);
+    v3 = _SafeDiv(v1, v2);
+    v4 = _SafeMul(v3, _exchangeRate);
+    v5 = _SafeDiv(0xde0b6b3a7640000, v4);
+    _exchangeRate = v5;
+    v6 = _SafeDiv(0xde0b6b3a7640000, v0.word0);
+    emit Transfer(_revenueAddress, 0, v6);
+    v7 = _SafeDiv(0xde0b6b3a7640000, v0.word0);
+    require(0xde0b6b3a7640000, Panic(18)); // division by zero
+    emit RevenueDistributed(_revenueAddress, _exchangeRate, v7, v0.word0 % 0xde0b6b3a7640000);
+}
+
+function removeMinter(address varg0) public payable { 
+    require(msg.data.length - 4 >= 32);
+    require(varg0 == varg0);
+    require(msg.sender == _owner, Error('Ownable: caller is not the owner'));
+    v0 = 0x1409(varg0, 11);
+    require(v0, Error('Roles: account does not have role'));
+    map_b[varg0] = bytes31(map_b[address(varg0)]);
+    emit MinterRemoved(msg.sender, varg0);
+}
+
+function decimals() public payable { 
+    return _decimals;
+}
+
+function exchangeRate() public payable { 
+    return _exchangeRate;
+}
+
+function revenue() public payable { 
+    v0 = 0x148c(_revenueAddress);
+    v1 = _SafeDiv(0xde0b6b3a7640000, v0.word0);
+    return v1;
+}
+
+function setRevenueAddress(address varg0) public payable { 
+    require(msg.data.length - 4 >= 32);
+    require(varg0 == varg0);
+    require(msg.sender == _owner, Error('Ownable: caller is not the owner'));
+    require(_allowance[varg0][this], Error('Token: the allowances of account must be large than zero'));
+    _revenueAddress = varg0;
+    emit RevenueAddressSet(varg0);
+}
+
+function granularity() public payable { 
+    return 1;
+}
+
+function operatorSend(address varg0, address varg1, uint256 varg2, bytes varg3, bytes varg4) public payable { 
+    require(msg.data.length - 4 >= 160);
+    require(varg0 == varg0);
+    require(varg1 == varg1);
+    require(varg3 <= uint64.max);
+    require(4 + varg3 + 31 < msg.data.length);
+    require(varg3.length <= uint64.max);
+    require(4 + varg3 + varg3.length + 32 <= msg.data.length);
+    require(varg4 <= uint64.max);
+    require(4 + varg4 + 31 < msg.data.length);
+    require(varg4.length <= uint64.max);
+    require(4 + varg4 + varg4.length + 32 <= msg.data.length);
+    v0 = 0x9d3(varg0, msg.sender);
+    require(v0, Error('ERC777: caller is not an operator for holder'));
+    v1 = new bytes[](varg3.length);
+    CALLDATACOPY(v1.data, varg3.data, varg3.length);
+    v1[varg3.length] = 0;
+    v2 = new bytes[](varg4.length);
+    CALLDATACOPY(v2.data, varg4.data, varg4.length);
+    v2[varg4.length] = 0;
+    0x11de(1, v2, v1, varg2, varg1, varg0, msg.sender);
+}
+
+function balanceOf(address varg0) public payable { 
+    require(msg.data.length - 4 >= 32);
+    require(varg0 == varg0);
+    v0 = 0x148c(varg0);
+    v1 = _SafeDiv(0xde0b6b3a7640000, v0.word0);
+    return v1;
+}
+
+function renounceOwnership() public payable { 
+    require(msg.sender == _owner, Error('Ownable: caller is not the owner'));
+    _owner = 0;
+    emit OwnershipTransferred(_owner, address(0x0));
+}
+
+function owner() public payable { 
+    return _owner;
+}
+
+function authorizeOperator(address varg0) public payable { 
+    require(msg.data.length - 4 >= 32);
+    require(varg0 == varg0);
+    require(msg.sender - varg0, Error('ERC777: authorizing self as operator', 'ERC777: authorizing self as operator'));
+    _revokeOperator[msg.sender][varg0] = 0x1 | bytes31(_revokeOperator[msg.sender][address(varg0)]);
+    emit AuthorizedOperator(varg0, msg.sender);
+}
+
+function symbol() public payable { 
+    v0 = 0x905();
+    v1 = new bytes[](v0.length);
+    v2 = 0;
+    while (v2 < v0.length) {
+        v1[v2] = v0[v2];
+        v2 += 32;
+    }
+    v1[v0.length] = 0;
+    return v1;
+}
+
+function addMinter(address varg0) public payable { 
+    require(msg.data.length - 4 >= 32);
+    require(varg0 == varg0);
+    require(msg.sender == _owner, Error('Ownable: caller is not the owner'));
+    v0 = 0x1409(varg0, 11);
+    require(!v0, Error('Roles: account already has role'));
+    map_b[varg0] = 0x1 | bytes31(map_b[address(varg0)]);
+    emit MinterAdded(msg.sender, varg0);
+}
+
+function send(address varg0, uint256 varg1, bytes varg2) public payable { 
+    require(msg.data.length - 4 >= 96);
+    require(varg0 == varg0);
+    require(varg2 <= uint64.max);
+    require(4 + varg2 + 31 < msg.data.length);
+    require(varg2.length <= uint64.max);
+    require(4 + varg2 + varg2.length + 32 <= msg.data.length);
+    v0 = new bytes[](varg2.length);
+    CALLDATACOPY(v0.data, varg2.data, varg2.length);
+    v0[varg2.length] = 0;
+    MEM[64] = MEM[64] + 32;
+    MEM[MEM[64]] = 0;
+    0x11de(1, MEM[64], v0, varg1, varg0, msg.sender, msg.sender);
+}
+
+function transfer(address varg0, uint256 varg1) public payable { 
+    require(msg.data.length - 4 >= 64);
+    require(varg0 == varg0);
+    require(varg0, Error('ERC777: transfer to the zero address'));
+    MEM[64] += 32;
+    MEM[MEM[64]] = 0;
+    MEM[64] += 32;
+    MEM[MEM[64]] = 0;
+    0x1756(MEM[64], MEM[64], varg1, varg0, msg.sender, msg.sender);
+    MEM[64] += 32;
+    MEM[MEM[64]] = 0;
+    MEM[64] += 32;
+    MEM[MEM[64]] = 0;
+    0x186d(MEM[64], MEM[64], varg1, varg0, msg.sender, msg.sender);
+    MEM[64] += 32;
+    MEM[MEM[64]] = 0;
+    MEM[64] += 32;
+    MEM[MEM[64]] = 0;
+    0x1940(0, MEM[64], MEM[64], varg1, varg0, msg.sender, msg.sender);
+    return bool(1);
+}
+
+function isMinter(address varg0) public payable { 
+    require(msg.data.length - 4 >= 32);
+    require(varg0 == varg0);
+    v0 = 0x1409(varg0, 11);
+    return bool(v0);
+}
+
+function revenueAddress() public payable { 
+    return _revenueAddress;
+}
+
+function accuracyBalanceOf(address varg0) public payable { 
+    require(msg.data.length - 4 >= 32);
+    require(varg0 == varg0);
+    v0 = 0x148c(varg0);
+    return v0.word0;
+}
+
+function isOperatorFor(address varg0, address varg1) public payable { 
+    require(msg.data.length - 4 >= 64);
+    require(varg0 == varg0);
+    require(varg1 == varg1);
+    v0 = 0x9d3(varg1, varg0);
+    return bool(v0);
+}
+
+function mint(address varg0, uint256 varg1, bytes varg2, bytes varg3) public payable { 
+    require(msg.data.length - 4 >= 128);
+    require(varg0 == varg0);
+    require(varg2 <= uint64.max);
+    require(4 + varg2 + 31 < msg.data.length);
+    require(varg2.length <= uint64.max);
+    require(4 + varg2 + varg2.length + 32 <= msg.data.length);
+    require(varg3 <= uint64.max);
+    require(4 + varg3 + 31 < msg.data.length);
+    require(varg3.length <= uint64.max);
+    require(4 + varg3 + varg3.length + 32 <= msg.data.length);
+    v0 = 0x1409(msg.sender, 11);
+    require(v0, Error('MinterRole: caller does not have the Minter role'));
+    v1 = new bytes[](varg2.length);
+    CALLDATACOPY(v1.data, varg2.data, varg2.length);
+    v1[varg2.length] = 0;
+    v2 = new bytes[](varg3.length);
+    CALLDATACOPY(v2.data, varg3.data, varg3.length);
+    v2[varg3.length] = 0;
+    require(varg0, Error('ERC777: mint to the zero address'));
+    0x1940(0, v2, v1, varg1, varg0, 0, msg.sender);
+    v3 = _SafeMul(0xde0b6b3a7640000, varg1);
+    v4 = _SafeAdd(v3, _totalSupply);
+    _totalSupply = v4;
+    v5 = 0x148c(varg0);
+    v6 = _SafeAdd(v3, v5.word0);
+    v5.word0 = v6;
+    owner_1[varg0].field0 = v5.word0;
+    owner_1[varg0].field1 = v5.word1;
+    v7 = new bytes[](v1.length);
+    v8 = 0;
+    while (v8 < v1.length) {
+        v7[v8] = v1[v8];
+        v8 += 32;
+    }
+    v7[v1.length] = 0;
+    v9 = new bytes[](v2.length);
+    v7[v1.length + 31 & ~0x1f] = v2.length;
+    v10 = 0;
+    while (v10 < v2.length) {
+        v9[v10] = v2[v10];
+        v10 += 32;
+    }
+    v9[v2.length] = 0;
+    emit Minted(msg.sender, varg0, varg1, v7, v9);
+    emit Transfer(0, varg0, varg1);
+}
+
+function allowance(address varg0, address varg1) public payable { 
+    require(msg.data.length - 4 >= 64);
+    require(varg0 == varg0);
+    require(varg1 == varg1);
+    return _allowance[varg0][varg1];
+}
+
+function transferOwnership(address varg0) public payable { 
+    require(msg.data.length - 4 >= 32);
+    require(varg0 == varg0);
+    require(msg.sender == _owner, Error('Ownable: caller is not the owner'));
+    require(varg0, Error('Ownable: new owner is the zero address'));
+    _owner = varg0;
+    emit OwnershipTransferred(_owner, varg0);
+}
+
+function revokeOperator(address varg0) public payable { 
+    require(msg.data.length - 4 >= 32);
+    require(varg0 == varg0);
+    require(varg0 - msg.sender, Error('ERC777: revoking self as operator'));
+    _revokeOperator[msg.sender][varg0] = bytes31(_revokeOperator[msg.sender][address(varg0)]);
+    emit RevokedOperator(varg0, msg.sender);
+}
+
+function operatorBurn(address varg0, uint256 varg1, bytes varg2, bytes varg3) public payable { 
+    require(msg.data.length - 4 >= 128);
+    require(varg0 == varg0);
+    require(varg2 <= uint64.max);
+    require(4 + varg2 + 31 < msg.data.length);
+    require(varg2.length <= uint64.max);
+    require(4 + varg2 + varg2.length + 32 <= msg.data.length);
+    require(varg3 <= uint64.max);
+    require(4 + varg3 + 31 < msg.data.length);
+    require(varg3.length <= uint64.max);
+    require(4 + varg3 + varg3.length + 32 <= msg.data.length);
+    v0 = 0x9d3(varg0, msg.sender);
+    require(v0, Error('ERC777: caller is not an operator for holder'));
+    v1 = new bytes[](varg2.length);
+    CALLDATACOPY(v1.data, varg2.data, varg2.length);
+    v1[varg2.length] = 0;
+    v2 = new bytes[](varg3.length);
+    CALLDATACOPY(v2.data, varg3.data, varg3.length);
+    v2[varg3.length] = 0;
+    0x163a(v2, v1, varg1, varg0, msg.sender);
+}
+
+function burn(uint256 varg0, bytes varg1) public payable { 
+    require(msg.data.length - 4 >= 64);
+    require(varg1 <= uint64.max);
+    require(4 + varg1 + 31 < msg.data.length);
+    require(varg1.length <= uint64.max);
+    require(4 + varg1 + varg1.length + 32 <= msg.data.length);
+    v0 = new bytes[](varg1.length);
+    CALLDATACOPY(v0.data, varg1.data, varg1.length);
+    v0[varg1.length] = 0;
+    MEM[64] = MEM[64] + 32;
+    MEM[MEM[64]] = 0;
+    0x163a(MEM[64], v0, varg0, msg.sender, msg.sender);
+}
+
+function 0x44e() private { 
+    v0 = new uint256[](array_7.length);
+    v1 = v2 = v0.data;
+    if (!array_7.length) {
+        return v0;
+    } else {
+        v3 = v4 = array_7.data;
+        do {
+            MEM[v1] = address(STORAGE[v3]);
+            v3 = v3 + 1;
+            v1 += 32;
+        } while (v2 + (array_7.length << 5) <= v1);
+        return v0;
+    }
+}
+
+function 0x4b0() private { 
+    v0 = 0x2015(array_4.length);
+    v1 = new bytes[](v0);
+    v2 = v3 = v1.data;
+    v4 = 0x2015(array_4.length);
+    if (!v4) {
+        return v1;
+    } else if (31 < v4) {
+        v5 = array_4.data;
+        do {
+            MEM[v2] = STORAGE[v5];
+            v5 += 1;
+            v2 += 32;
+        } while (v3 + v4 <= v2);
+        return v1;
+    } else {
+        MEM[v3] = array_4.length >> 8 << 8;
+        return v1;
+    }
+}
+
+function 0x905() private { 
+    v0 = 0x2015(array_5.length);
+    v1 = new bytes[](v0);
+    v2 = v3 = v1.data;
+    v4 = 0x2015(array_5.length);
+    if (!v4) {
+        return v1;
+    } else if (31 < v4) {
+        v5 = array_5.data;
+        do {
+            MEM[v2] = STORAGE[v5];
+            v5 += 1;
+            v2 += 32;
+        } while (v3 + v4 <= v2);
+        return v1;
+    } else {
+        MEM[v3] = array_5.length >> 8 << 8;
+        return v1;
+    }
+}
+
+function 0x9d3(address varg0, address varg1) private { 
+    if (varg1 == varg0) {
+        return varg1 == varg0;
+    } else {
+        return uint8(_revokeOperator[address(varg0)][address(varg1)]);
+    }
+}
+
+function 0xd4c(uint256 varg0, address varg1, address varg2) private { 
+    require(varg1, Error('ERC777: approve to the zero address'));
+    _allowance[varg2][varg1] = varg0;
+    emit Approval(varg2, varg1, varg0);
+    return ;
+}
+
+function _SafeDiv(uint256 varg0, uint256 varg1) private { 
+    require(varg0, Panic(18)); // division by zero
+    return varg1 / varg0;
+}
+
+// Note: The function selector is not present in the original solidity code.
+// However, we display it for the sake of completeness.
+
+function __function_selector__(bytes4 function_selector) public payable { 
+    MEM[64] = 128;
+    require(!msg.value);
+    if (msg.data.length >= 4) {
+        v0 = function_selector >> 224;
+        if (0x8da5cb5b > v0) {
+            if (0x313ce567 > v0) {
+                if (0x18160ddd > v0) {
+                    if (0x6e48538 == v0) {
+                        defaultOperators();
+                    } else if (0x6fdde03 == v0) {
+                        name();
+                    } else if (0x95ea7b3 == v0) {
+                        approve(address,uint256);
+                    }
+                } else if (0x18160ddd == v0) {
+                    totalSupply();
+                } else if (0x23b872dd == v0) {
+                    transferFrom(address,address,uint256);
+                } else if (0x2d07953a == v0) {
+                    distributeRevenue();
+                } else {
+                    require(0x3092afd5 == v0);
+                    removeMinter(address);
+                }
+            } else if (0x556f0dc7 > v0) {
+                if (0x313ce567 == v0) {
+                    decimals();
+                } else if (0x3ba0b9a9 == v0) {
+                    exchangeRate();
+                } else if (0x3e9491a2 == v0) {
+                    revenue();
+                } else {
+                    require(0x45338d63 == v0);
+                    setRevenueAddress(address);
+                }
+            } else if (0x556f0dc7 == v0) {
+                granularity();
+            } else if (0x62ad1b83 == v0) {
+                operatorSend(address,address,uint256,bytes,bytes);
+            } else if (0x70a08231 == v0) {
+                balanceOf(address);
+            } else {
+                require(0x715018a6 == v0);
+                renounceOwnership();
+            }
+        } else if (0xd6644ff7 > v0) {
+            if (0x9bd9bbc6 > v0) {
+                if (0x8da5cb5b == v0) {
+                    owner();
+                } else if (0x959b8c3f == v0) {
+                    authorizeOperator(address);
+                } else if (0x95d89b41 == v0) {
+                    symbol();
+                } else {
+                    require(0x983b2d56 == v0);
+                    addMinter(address);
+                }
+            } else if (0x9bd9bbc6 == v0) {
+                send(address,uint256,bytes);
+            } else if (0xa9059cbb == v0) {
+                transfer(address,uint256);
+            } else if (0xaa271e1a == v0) {
+                isMinter(address);
+            } else {
+                require(0xb410908d == v0);
+                revenueAddress();
+            }
+        } else if (0xf2fde38b > v0) {
+            if (0xd6644ff7 == v0) {
+                accuracyBalanceOf(address);
+            } else if (0xd95b6371 == v0) {
+                isOperatorFor(address,address);
+            } else if (0xdcdc7dd0 == v0) {
+                mint(address,uint256,bytes,bytes);
+            } else {
+                require(0xdd62ed3e == v0);
+                allowance(address,address);
+            }
+        } else if (0xf2fde38b == v0) {
+            transferOwnership(address);
+        } else if (0xfad8b32a == v0) {
+            revokeOperator(address);
+        } else if (0xfc673c4f == v0) {
+            operatorBurn(address,uint256,bytes,bytes);
+        } else {
+            require(0xfe9d9303 == v0);
+            burn(uint256,bytes);
+        }
+    }
+    ();
+}
