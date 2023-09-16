@@ -1,3 +1,3 @@
 # MetaTrust2023
 
-This is a private repo, maintained by 0xdd.
+This repo contains MetaTrust2023 writeup, maintained by 0xdd.
